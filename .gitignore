@@ -1,0 +1,8 @@
+/target
+/.externalToolBuilders
+/.settings
+/.classpath
+/.project
+/.idea
+*.iml
+src/main/metamodel

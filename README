@@ -1,0 +1,15 @@
+Тут аспекты двух типов:
+1. Spring AOP
+    Располагаются в пакете ru.dmkuranov.aspects_util.spring
+    В контексте приложения требуется <aop:aspectj-autoproxy/> и объявление бинов аспектов или <import resource="aspects_util.xml"/>
+2. Load-time weaving with AspectJ
+    Располагаются в пакете ru.dmkuranov.aspects_util.aspectj
+    2.1. Для Tomcat:
+        В контексте приложения должен быть включен <context:load-time-weaver aspectj-weaving="on" weaver-class="org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver" />
+        spring-instrument-tomcat-X.RELEASE.jar должен быть в lib tomcat'а
+        в context.xml tomcat'а или приложения должен быть объяевлен classloader <Loader loaderClass="org.springframework.instrument.classloading.tomcat.TomcatInstrumentableClassLoader"/>
+        Примечание: совместимость версий spring-instrument-tomcat с tomcat может теряться https://jira.spring.io/browse/SPR-13210
+    2.2. Для standalone spring jar:
+        Необходим запуск jvm с javaAgent'ом: -javaagent:"\???\spring-instrument-X.RELEASE.jar" и <context:load-time-weaver aspectj-weaving="on"/> в контексте
+
+Список зависимостей в pom.xml(provided), как правило в большинстве приложений все уже есть.

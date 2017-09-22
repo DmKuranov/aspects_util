@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<aspectj>
+
+    <weaver options="-showWeaveInfo -Xlint:ignore">
+        <dump beforeandafter="true"/>
+        <!-- <dump within="ru.*" beforeandafter="true"/> -->
+        <!-- options="-showWeaveInfo -verbose -debug" -->
+    </weaver>
+
+    <aspects>
+        <aspect name="ru.dmkuranov.aspects_util.aspectj.timelimit.TimeLimitedExecutionAspect"/>
+        <aspect name="ru.dmkuranov.aspects_util.aspectj.exectime.MethodExecutionTimeAspect"/>
+    </aspects>
+
+</aspectj>
