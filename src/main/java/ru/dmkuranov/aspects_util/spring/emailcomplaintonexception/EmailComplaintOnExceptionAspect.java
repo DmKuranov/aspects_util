@@ -1,5 +1,6 @@
 package ru.dmkuranov.aspects_util.spring.emailcomplaintonexception;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,18 +19,25 @@ import javax.servlet.http.HttpSession;
 
 @Aspect
 public class EmailComplaintOnExceptionAspect implements Ordered {
-    @Autowired
+    @Autowired(required = false)
     private HttpSession httpSession;
-    @Autowired
+    @Autowired(required = false)
     private HttpServletRequest httpServletRequest;
     private static final Logger log = LoggerFactory.getLogger(EmailComplaintOnExceptionAspect.class);
+    @Autowired(required = false)
     private JavaMailSender javaMailSender;
-    private String mailFrom;
-    private FrequencyLimiter limiter = new FrequencyLimiter();
+    private final String mailFrom;
+    private final FrequencyLimiter limiter = new FrequencyLimiter();
 
-    public EmailComplaintOnExceptionAspect(JavaMailSender javaMailSender, String mailFrom) {
-        this.javaMailSender = javaMailSender;
+    public EmailComplaintOnExceptionAspect() {
+        this(null);
+    }
+
+    public EmailComplaintOnExceptionAspect(String mailFrom) {
         this.mailFrom = mailFrom;
+        if(StringUtils.isEmpty(mailFrom)) {
+            log.info("No mail from address specified.");
+        }
         limiter.addLimit(60, 1).addLimit(3600, 3).addLimit(3600*24, 5);
     }
 
@@ -49,13 +57,20 @@ public class EmailComplaintOnExceptionAspect implements Ordered {
             return result;
         } catch (Exception e) {
             if (limiter.eventOccuredProcessingAllowed()) {
-                SimpleMailMessage message = new SimpleMailMessage();
-                message.setFrom(mailFrom);
-                message.setTo(annotation.value());
-                message.setSubject(makeMessageSubject(annotation, e));
-                message.setText(makeMessageBody(e, pjp));
-                log.warn(message.getText());
-                javaMailSender.send(message);
+                try {
+                    SimpleMailMessage message = new SimpleMailMessage();
+                    message.setFrom(mailFrom);
+                    message.setTo(annotation.value());
+                    String subject = makeMessageSubject(annotation, e);
+                    String body = makeMessageBody(e, pjp);
+                    log.info(subject + "\n" + body);
+                    message.setSubject(subject);
+                    message.setText(body);
+                    log.warn(message.getText());
+                    javaMailSender.send(message);
+                } catch (Exception ex) {
+                    // swallow it
+                }
             }
             throw e;
         }

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ru.dmkuranov</groupId>
     <artifactId>aspects_util</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>jar</packaging>
     <name>Utility aspects</name>
     <url>http://maven.apache.org</url>

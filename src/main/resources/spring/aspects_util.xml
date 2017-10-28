@@ -14,11 +14,7 @@
     <bean class="ru.dmkuranov.aspects_util.spring.disableexecutioninsessiononexception.DisableExecutionInSessionOnExceptionAspect"/>
 
     <bean class="ru.dmkuranov.aspects_util.spring.emailcomplaintonexception.EmailComplaintOnExceptionAspect">
-        <constructor-arg name="javaMailSender" ref="mailSenderForUtilAspects"/>
         <constructor-arg name="mailFrom" value="${aspects_util.mailFrom}"/>
-    </bean>
-    <bean id="mailSenderForUtilAspects" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="${aspects_util.smtpHost}"/>
     </bean>
 
 </beans>

@@ -2,6 +2,7 @@
 1. Spring AOP
     Располагаются в пакете ru.dmkuranov.aspects_util.spring
     В контексте приложения требуется <aop:aspectj-autoproxy/> и объявление бинов аспектов или <import resource="aspects_util.xml"/>
+    Для отправки сообщений в контексте требуется JavaMailSender и свойство aspects_util.mailFrom
 2. Load-time weaving with AspectJ
     Располагаются в пакете ru.dmkuranov.aspects_util.aspectj
     2.1. Для Tomcat:
